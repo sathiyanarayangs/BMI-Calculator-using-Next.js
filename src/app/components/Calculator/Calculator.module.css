@@ -6,38 +6,53 @@
 	margin-bottom: 2rem; 
 }
 
-.FormGroup {
-	margin-bottom: 1rem;
-}
-  
 .Label {
 	display: block;
-	margin-bottom: 0.5rem;
-	font-weight: bold;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	font-size: 20px;
 	color: #4a5568;
+	font-family: serif,arial;
 }
   
-.Input {
-	width: 100%;
+.Input { 
+	width: 100%; 
 	padding: 0.5rem;
 	border: 1px solid #ccc;
 	border-radius: 0.25rem;
+	margin-top: 10px;
+	margin-right: 10px;
 }
-  
-.Note {
-	font-size: 0.875rem;
-	color: #718096;
-	margin-top: 0.25rem;
+
+
+.suffix {
+	color: #afadad;
+	position: absolute;
+	z-index: 9999;
+	right: 20px;;
+  	top: 18px;
+}
+
+.Input::-webkit-outer-spin-button,
+.Input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .Header {
 	display: flex;
+	justify-content: space-between;
 	align-items: center;
-	margin-bottom: 1rem;
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	padding-left: 3.5rem;
+	padding-right: 3.5rem;
+	margin-top: 2rem;
+	background-color: #657E79;
+	border-radius: 4px;
 }
   
 .Logo {
-	border-radius: 9999px;
 	margin: 1rem;
 }
   
@@ -48,113 +63,77 @@
 .Title {
 	font-size: 1.875rem;
 	font-weight: bold;
-	color: #d20000; 
+	color: white;
 	font-family: Arial, Helvetica, sans-serif;
 }
   
 .Subtitle {
 	font-size: 1.25rem;
-	color: #d20000; 
+	color: white; 
 }
 
-.TwoColumnGrid {
-	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
-	gap: 1rem;
-}
-  
-.GenderButton{
-	background-color: hsl(0, 0%, 100%);
-	color: #333; 
-	padding: 10px 22px;	
-	margin-right: 25px;
-	border: 2px solid #ffc965;
-}
-
-.FormContainer {
-	display: flex;
-	flex-wrap: wrap;
-}
-  
-.FormSection {
-	width: 50%;
-	padding-right: 0;
-}
-  
-.InputContainer {
-	margin-top: 1rem;
-	position: relative;
-}
-  
-.InputLabel {
-	display: block;
-	margin-bottom: 0.5rem;
-	font-weight: bold;
-}
-  
-.InputWrapper {
-	display: flex;
-	align-items: center;
-}
-  
-.InputFeet,
-  .InputInches,
-  .InputCm {
-	width: 50%;
-	padding: 0.5rem;
-	border: 1px solid #ccc;
-	border-radius: 0.25rem;
-	margin-right: 0.5rem;
-}
-  
-.InputCm {
-	width: 30rem;
-
-}
-  
-.UnitSwitch {
-	margin-top: 0.5rem;
-}
-  
-.SwitchText {
-	font-size: 0.875rem;
-	color: #3490dc; 
-	text-decoration: underline;
-	cursor: pointer;
-}
-
-.WeightContainer {
-	width: 50%;
-	padding-left: 0; 
-}
-  
-.WeightInput {
-	margin-top: 1rem;
-}
-  
-.WeightLabel {
-	display: block;
-	margin-bottom: 0.5rem;
-	font-weight: bold;
-}
-  
-.WeightField {
-	width: 100%;
-	padding: 0.5rem;
-	border: 1px solid #ccc;
-	border-radius: 0.25rem;
-}
 
 .ButtonContainer {
-	margin-top: 1rem;
-	display: flex;
-	justify-content: center;
+	margin-top: 25px;
+
 }
   
 .CalculateButton {
-	background-color: #ff9800;
+	background-color: #657E79;
 	color: #ffffff; 
-	padding: 0.5rem 1rem;
-	border-radius: 9999px;
+	padding: 14px 24px;
+	border-radius: 4px;
+	width: 100%;
+}
+
+.stylesGrid{
+	display: block;
+}
+
+.stylesLeftGrid{
+	padding: 35px;
+	background-color: #f6f5f3;
+}
+
+@media only screen and (min-width: 1000px) and (max-width:1200px){
+	.stylesGrid{
+		display: flex;
+		justify-content: space-between;
+	}
+	.stylesLeftGrid{
+		width: 35%;
+		padding: 35px;
+		background-color: #f6f5f3;
+	}
+	.stylesRightGrid{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 65%;
+	}
+	.RightContent{
+		padding-left: 250px;
+	}
+}
+
+@media only screen and (min-width: 1200px){
+	.stylesGrid{
+		display: flex;
+		justify-content: space-between;
+	}
+	.stylesLeftGrid{
+		width: 35%;
+		padding: 35px;
+		background-color: #f6f5f3;
+	}
+	.stylesRightGrid{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 65%;
+	}
+	.RightContent{
+		padding-left: 100px;
+	}
 }
 

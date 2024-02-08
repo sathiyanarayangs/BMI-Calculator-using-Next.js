@@ -1,22 +1,30 @@
 "use client"
 import Image from 'next/image';
-import { useEffect} from 'react';
 import React, { useState } from 'react';
-import ChartContainer from '../ChartContainer/ChartContainer';
 import styles from './Calculator.module.css';
 
 export default function Calculator() {
-  const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedGender, setSelectedGender] = useState('male');
   const [feet, setFeet] = useState('');
   const [heightInInches, setHeightInInches] = useState('');
   const [heightInCm, setHeightInCm] = useState('');
   const [isInches, setIsInches] = useState(true);
   const [age, setAge] = useState('');
+  const [month,setMonth]=useState('');
   const [weight, setWeight] = useState('');
   const [bmiResult, setBmiResult] = useState('NaN');
+  const [selectedCategory, setSelectedCategory] = useState('Adult (Age 20+)'); 
+  const [healthyCategory, setHealthyCategory]=useState('');
+  const [healthyweight1, sethealthyweight1]=useState('');
+  const [healthyweight2, sethealthyweight2]=useState('');
+  const [xAxis, setxAxis]=useState('');
 
   const handleAgeChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     setAge(event.target.value);
+  };
+
+  const handleMonthChange = (event:React.ChangeEvent<HTMLInputElement>) => {
+    setMonth(event.target.value);
   };
 
   const handleWeightChange = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -47,152 +55,271 @@ export default function Calculator() {
     setSelectedGender(gender);
   };
   
-  const handleCalculate = () => {
-    let heightInMeters;
-  
-    if (isInches) {
-      const totalInches = (parseInt(feet, 10) * 12) + parseInt(heightInInches, 10);
-      heightInMeters = totalInches * 0.0254;
-    } else {
-      heightInMeters = parseFloat(heightInCm) * 0.01;
+
+  async function handleCalculate(ev) {
+    const response = await fetch('/api/bmi', {
+      method: 'POST',
+      body: JSON.stringify({feet, heightInInches, heightInCm, weight, isInches}),
+      headers: {'Content-Type': 'application/json'},
+    });
+    if (response.ok) {
+      const data = await response.json();
+      setBmiResult(data.toFixed(2));
+      if(isInches){
+        let h1=(18.5/703)*(parseInt(feet)*12+parseInt(heightInInches))*(parseInt(feet)*12+parseInt(heightInInches));
+        sethealthyweight1(h1.toFixed(0));
+        let h2=(25.0/703)*(parseInt(feet)*12+parseInt(heightInInches))*(parseInt(feet)*12+parseInt(heightInInches));
+        sethealthyweight2(h2.toFixed(0));
+      }
+      if(!isInches){
+        let h1=18.5*parseInt(heightInCm)*parseInt(heightInCm)*0.0001;
+        sethealthyweight1(h1.toFixed(0));
+        let h2=25.0*parseInt(heightInCm)*parseInt(heightInCm)*0.0001;
+        sethealthyweight2(h2.toFixed(0));
+      }
+      if(data<18.5){
+        setHealthyCategory('Underweight')
+        setxAxis("100");
+      }
+      else if(data>=18.5 && data<25.0){
+        setHealthyCategory('Healthy')
+        setxAxis("300");
+      }
+      else if(data>=25.0 && data<30.0){
+        setHealthyCategory('Overweight')
+        setxAxis("500");
+      }
+      else if(data>30.0){
+          setHealthyCategory('Obese')
+          setxAxis("700");
+      }
+
     }
-
-    const bmi = parseFloat(weight) / (heightInMeters * heightInMeters);
-      
-    setBmiResult(bmi.toFixed(2));
-  };
-  
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-      const response = await fetch('/api/bmi');
-      if (response.ok) {
-        const data = await response.json();
-      } else {
-        console.error('Failed to fetch data from API');
-      }
-      } catch (error) {
-      console.error('Error fetching data:', error);
-      }
-    };
-    
-    fetchData();
-    }, []);
+    else {
+      alert("Error");
+    }
+  }
 
   return (
     <>
-    <main className={styles.main}>
-      <div>
+    <div style={{display: 'flex', justifyContent:'space-evenly'}}>
+      <div style={{ width: '80%'}}>
         <div className={styles.Header}>
-          <Image className={styles.Logo} src="/bmilogo.png" alt="" width={100} height={50} />
-          <div className={styles.HeaderContent}>
-            <h1 className={styles.Title}>BMI Calculator</h1>
-            <h2 className={styles.Subtitle}>Body Mass Index</h2>
-          </div>
+              <div className={styles.HeaderContent}>
+                <h1 className={styles.Title}>BMI Calculator</h1>
+                <h2 className={styles.Subtitle}>Use this calculator to check your body mass index (BMI).</h2>
+              </div>
+              <div>
+                <Image className={styles.Logo} src="/bmilogo.png" alt="" width={100} height={50} />
+              </div>
         </div>
-        
-        <div className={styles.TwoColumnGrid}>
-          <div className={styles.FormGroup}>
-            <label className={styles.Label}>Gender:</label>
+        <div className={styles.stylesGrid}>
+          <div className={styles.stylesLeftGrid}>
             <div>
-            <button onClick={() => handleGenderChange('male')} style={{color: selectedGender === 'male' ? 'white' : '#333', padding: '10px 22px', marginRight: '20px', border: selectedGender === 'male' ? 'white' : '2px solid #333', backgroundColor: selectedGender === 'male' ? 'orange' : 'hsl(0, 0%, 100%)',}}>
-              Male
-            </button>
-            <button onClick={() => handleGenderChange('female')} style={{color: selectedGender === 'female' ? 'white' : '#333', padding: '10px 22px', marginRight: '20px', border: selectedGender === 'female' ? 'white' : '2px solid #333', backgroundColor: selectedGender === 'female' ? 'orange' : 'hsl(0, 0%, 100%)',}}>
-                Female
-            </button>
+              <label className={styles.Label}>Select</label>
+                <select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)} style={{padding:'15px'}}>
+                  <option value="Child (Age 5-19)">Child (Age 5-19)</option>
+                  <option value="Adult (Age 20+)">Adult (Age 20+)</option>
+                </select>
             </div>
-          </div>
-
-          <div className={styles.FormGroup}>
-            <label className={styles.Label}>Age:</label>
-            <input
-              type="number"
-              value={age}
-              onChange={handleAgeChange}
-              placeholder="Enter age in years"
-              className={styles.Input}
-            />
-            <p className={styles.Note}>(Between 2 yrs and 120 yrs)</p>
-          </div>
-        </div>
-
-        
-        <div className={styles.FormContainer}>
-            {isInches ? (
-              <div className={styles.FormSection}>
-                <div className={styles.InputContainer}>
-                  <label className={styles.InputLabel}>Enter Height:</label>
-                  <div className={styles.InputWrapper}>
-                    <input
-                      type="number"
-                      value={feet}
-                      onChange={handleFeetChange}
-                      placeholder="Feet"
-                      className={styles.InputFeet}
-                    />
-                    <input
-                      type="number"
-                      value={heightInInches}
-                      onChange={handleInchesChange}
-                      placeholder="Inches"
-                      className={styles.InputInches}
-                    />
+            {selectedCategory==="Child (Age 5-19)"?(
+              <div>
+                <label className={styles.Label}>Age</label>
+                  <div style={{display: 'flex'}}>
+                        <div style={{width:'45%', marginRight: '20px', display:'flex', position:'relative'}}>
+                            <input
+                              type="number"
+                              value={age}
+                              onChange={handleAgeChange}
+                              className={styles.Input}
+                            />
+                            <span className={styles.suffix}>years</span>
+                        </div>
+                        <div style={{width:'50%', display:'flex', position:'relative'}}>
+                          <input
+                            type="number"
+                            value={month}
+                            onChange={handleMonthChange}
+                            className={styles.Input}
+                          />
+                          <span className={styles.suffix}>months</span>
+                        </div>
                   </div>
                 </div>
-                <div className={styles.UnitSwitch}>
-                  <p className={styles.SwitchText} onClick={handleUnitSwitch}>
-                    Switch to cm
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className={styles.FormSection}>
-                <div className={styles.InputContainer}>
-                  <label className={styles.InputLabel}>Enter Height:</label>
-                  <div className={styles.InputWrapper}>
-                    <input
-                      type="number"
-                      value={heightInCm}
-                      onChange={handleHeightChange}
-                      placeholder="Height in centimeters"
-                      className={styles.InputCm}
-                    />
-                  </div>
-                </div>
-                <div className={styles.UnitSwitch}>
-                  <p className={styles.SwitchText} onClick={handleUnitSwitch}>
-                    Switch to inches
-                  </p>
-                </div>
-              </div>
+            ):(
+              <div></div>
             )}
-          
 
-          <div className={styles.WeightContainer}>
-            <div className={styles.WeightInput}>
-              <label className={styles.WeightLabel}>Weight (kg):</label>
-              <input
-                type="number"
-                value={weight}
-                onChange={handleWeightChange}
-                placeholder="Enter weight in kg"
-                className={styles.WeightField}
-              />
+              <div>
+                <label className={styles.Label}>Height</label>
+                <div>
+                <label style={{marginRight:'30px'}}>
+                  <input type="radio" value="false" 
+                                checked={isInches === false} 
+                                onChange={e => setIsInches(false)} style={{marginRight:'5px' , accentColor: '#657E79'}}/>
+                  Centimetres
+                </label>
+                <label>
+                  <input type="radio" value="true" 
+                                checked={isInches === true} 
+                                onChange={e => setIsInches(true)}  style={{marginRight:'5px' , accentColor: '#657E79'}}/>
+                  Feet and inches
+                </label>
+                </div>
+                <div>
+                {isInches?(
+                  <div>
+                    <div style={{display: 'flex'}}>
+                        <div style={{width:'45%', marginRight: '20px', display:'flex', position:'relative'}}>
+                          <input
+                            type="number"
+                            value={feet}
+                            onChange={handleFeetChange}
+                            className={styles.Input}
+                          />
+                          <span className={styles.suffix}>ft</span>
+                        </div>
+                        <div style={{width:'50%', display:'flex', position:'relative'}}>
+                          <input
+                            type="number"
+                            value={heightInInches}
+                            onChange={handleInchesChange}
+                            className={styles.Input}
+                          />
+                        <span className={styles.suffix}>in</span>
+                        </div>
+                    </div>
+                  </div>
+                    ):(
+                    <div style={{display:'flex', position:'relative'}}>
+                      <input
+                        type="number"
+                        value={heightInCm}
+                        onChange={handleHeightChange}
+                        className={styles.Input}
+                      />
+                      <span className={styles.suffix}>cms</span>
+                      </div>)}
+                </div>
+              </div>
+              
+
+              <div>
+                <label className={styles.Label}>Weight</label>
+                <div>
+                <label style={{marginRight:'30px'}}>
+                  <input type="radio" value="false" 
+                                checked={isInches === false} 
+                                onChange={e => setIsInches(false)} style={{marginRight:'5px', accentColor: '#657E79'}}/>
+                  Kilograms
+                </label>
+                <label>
+                  <input type="radio" value="true" 
+                                checked={isInches === true} 
+                                onChange={e => setIsInches(true)} style={{marginRight:'5px', accentColor: '#657E79'}} />
+                  Pounds
+                </label>
+                </div>
+                <div>
+                {isInches?(
+                  <div style={{display:'flex', position:'relative'}}>
+                      <input
+                        type="number"
+                        value={weight}
+                        onChange={handleWeightChange}
+                        className={styles.Input}
+                      />
+                      <span className={styles.suffix}>lbs</span>
+                      </div>
+                    ):(
+                    <div style={{display:'flex', position:'relative'}}>
+                      <input
+                        type="number"
+                        value={weight}
+                        onChange={handleWeightChange}
+                        className={styles.Input}
+                      />
+                      <span className={styles.suffix}>Kg</span>
+                      </div>)}
+                </div>
+              </div>
+              
+              {selectedCategory==="Child (Age 5-19)"?(
+
+                <div>
+                  <label className={styles.Label}>Gender</label>
+                  <div>
+                    <label style={{marginRight:'30px'}}>
+                      <input type="radio" value="male" 
+                                    checked={selectedGender === 'male'} 
+                                    onChange={e => handleGenderChange('male')} style={{marginRight:'5px', accentColor: '#657E79'}}/>
+                      Male
+                    </label>
+                    <label>
+                      <input type="radio" value="female" 
+                                    checked={selectedGender === 'female'} 
+                                    onChange={e =>handleGenderChange('female')} style={{marginRight:'5px', accentColor: '#657E79'}}/>
+                      Female
+                    </label>
+                  </div>
+                </div>
+              ):(<div></div>)}
+              
+                <div className={styles.ButtonContainer}>
+                  {bmiResult==='NaN'?(
+                  <button onClick={handleCalculate} className={styles.CalculateButton}>
+                    Calculate &gt;
+                  </button>
+                  ):(
+                  <button onClick={handleCalculate} className={styles.CalculateButton}>
+                    Recalculate &#10227;
+                  </button>)}
+                </div>
+              </div>
+            
+
+             <div className={styles.stylesRightGrid}> {/*Right side division */}
+              {bmiResult==='NaN'?(
+                <div style={{textAlign:'center', fontWeight:'500'}}>
+                  <p>Use this calculator to check your body mass index (BMI), </p>
+                  <p>which can be a helpful tool in determining your weight category. </p>
+                  <p>Or, use it to calculate your child’s BMI.</p>
+                </div>
+              ):(
+              <div className={styles.RightContent}>
+                <h1 style={{fontWeight:'bold'}}>Your Body Mass Index (BMI) is <span style={{fontSize:'40px', color:'#657E79', fontWeight:'bold', marginLeft:'10px', marginRight:'10px'}}>{bmiResult}</span></h1><br /><hr /><br />
+                <h1 style={{fontWeight:'bold'}}>According to your inputs, your weight is in the<span style={{fontSize:'40px', color:'#657E79', fontWeight:'bold', marginLeft:'10px', marginRight:'10px'}}>{healthyCategory}</span>category</h1><br />
+                <br /><br />
+                <svg width="100%" height="300" style={{position:'absolute', zIndex:'2'}}>
+                  <circle cx={xAxis} cy="25" r="18" stroke="white" stroke-width="4" fill="#657E79" />
+                </svg> 
+                <br />
+                <div style={{display:'flex', position:'relative', zIndex:'1'}}>
+                  <div style={{backgroundColor:'green', width:'200px', height:'5px'}}></div>
+                  <div style={{backgroundColor:'lightgreen', width:'200px', height:'5px'}}></div>
+                  <div style={{backgroundColor:'orange', width:'200px', height:'5px'}}></div>
+                  <div style={{backgroundColor:'red', width:'200px', height:'5px'}}></div>
+                </div>
+                <br />
+                <div style={{display:'flex', marginBottom:'20px'}}>
+                  <div style={{width:'200px', height:'5px', textAlign:'center', fontWeight:'bold'}}>Underweight</div>
+                  <div style={{ width:'200px', height:'5px', textAlign:'center', fontWeight:'bold'}}>Healthy</div>
+                  <div style={{ width:'200px', height:'5px', textAlign:'center', fontWeight:'bold'}}>Overweight</div>
+                  <div style={{ width:'200px', height:'5px', textAlign:'center', fontWeight:'bold'}}>Obese</div>
+                </div>
+                <div style={{display:'flex'}}>
+                  <div style={{width:'200px', height:'5px', textAlign:'center',  color:'grey'}}>(Below 18.5)</div>
+                  <div style={{ width:'200px', height:'5px', textAlign:'center', color:'grey'}}>(18.5 - 25.0)</div>
+                  <div style={{ width:'200px', height:'5px', textAlign:'center', color:'grey'}}>(25.0 - 30.0)</div>
+                  <div style={{ width:'200px', height:'5px', textAlign:'center', color:'grey'}}>(30.0 & Above)</div>
+                </div>
+                <br /><br /><hr /><br />
+                <h1 style={{fontWeight:'bold'}}>For your height, a healthy weight would be between <span style={{fontSize:'40px', color:'#657E79', fontWeight:'bold', marginLeft:'10px', marginRight:'10px'}}>{healthyweight1} & {healthyweight2}</span>{isInches?("pounds"):("kilograms")}</h1>
+              </div>)}
             </div>
           </div>
+          </div>
         </div>
-        <div className={styles.ButtonContainer}>
-          <button onClick={handleCalculate} className={styles.CalculateButton}>
-            Calculate
-          </button>
-        </div>
-      </div>
-      <div>
-        <ChartContainer bmiResult={bmiResult} />
-      </div>
-    </main>
     </>
   );
 }
