@@ -29,7 +29,7 @@ export default function LeftGrid({
 		<div className={styles.stylesLeftGrid}>
 			<div>
 			<label className={styles.Label}>Select</label>
-				<select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)} style={{padding:'15px'}}>
+				<select value={selectedCategory} onChange={e => setSelectedCategory(e.target.value)} style={{padding:'15px', width:'100%', border: '1px solid #ccc',borderRadius:'0.25rem', fontWeight:'500'}}>
 				<option value="Child (Age 5-19)">Child (Age 5-19)</option>
 				<option value="Adult (Age 20+)">Adult (Age 20+)</option>
 				</select>

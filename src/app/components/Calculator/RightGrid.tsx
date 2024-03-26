@@ -15,7 +15,7 @@ export default function RightGrid({ bmiResult, healthyCategory, xAxis, healthywe
           <h1 style={{ fontWeight: 'bold' }}>Your Body Mass Index (BMI) is <span style={{ fontSize: '40px', color: '#657E79', fontWeight: 'bold', marginLeft: '10px', marginRight: '10px' }}>{bmiResult}</span></h1><br /><hr /><br />
           <h1 style={{ fontWeight: 'bold' }}>According to your inputs, your weight is in the<span style={{ fontSize: '40px', color: '#657E79', fontWeight: 'bold', marginLeft: '10px', marginRight: '10px' }}>{healthyCategory}</span>category</h1><br />
           <br /><br />
-          <svg width="850" height="300" style={{ position: 'absolute', zIndex: '2' }}>
+          <svg width="65%" height="300" style={{ position: 'absolute', zIndex: '2' }}>
             <circle cx={xAxis} cy="25" r="18" stroke="white" strokeWidth={4} fill="#657E79" />
           </svg>
           <br />

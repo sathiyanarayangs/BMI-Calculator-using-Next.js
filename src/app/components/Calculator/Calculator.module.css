@@ -1,18 +1,11 @@
-.main{
-	display: flex; 
-	justify-content: space-evenly; 
-	padding: 2rem; 
-	margin-top: 2rem;
-	margin-bottom: 2rem; 
-}
-
 .Label {
 	display: block;
 	margin-top: 1rem;
-	margin-bottom: 1rem;
-	font-size: 20px;
-	color: #4a5568;
-	font-family: serif,arial;
+	margin-bottom: 0.3rem;
+	font-size: 16px;
+	color: #1E293B;
+	font-family: "Euclid Circular B", sans-serif;
+	font-weight: 400;
 }
   
 .Input { 
@@ -21,9 +14,8 @@
 	border: 1px solid #ccc;
 	border-radius: 0.25rem;
 	margin-top: 10px;
-	margin-right: 10px;
+	font-weight: 500;
 }
-
 
 .suffix {
 	color: #afadad;
@@ -43,11 +35,10 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-	padding-left: 3.5rem;
-	padding-right: 3.5rem;
-	margin-top: 2rem;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	padding-left: 40px;
+	padding-right: 40px;
 	background-color: #657E79;
 	border-radius: 4px;
 }
@@ -55,44 +46,33 @@
 .Logo {
 	margin: 1rem;
 }
-  
-.HeaderContent {
-	margin: 1rem;
-}
-  
+
 .Title {
-	font-size: 1.875rem;
-	font-weight: bold;
+	font-size: 36px;
+	font-weight: 600;
 	color: white;
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Euclid Circular B", sans-serif;
 }
   
 .Subtitle {
-	font-size: 1.25rem;
+	font-weight: 400;
+	font-size: 16px;
 	color: white; 
+	font-family: "Euclid Circular B", sans-serif;
 }
 
-
-.ButtonContainer {
-	margin-top: 25px;
-
-}
-  
-.CalculateButton {
-	background-color: #657E79;
-	color: #ffffff; 
-	padding: 14px 24px;
-	border-radius: 4px;
-	width: 100%;
-}
 
 .stylesGrid{
 	display: block;
 }
 
 .stylesLeftGrid{
-	padding: 35px;
+	padding: 40px;
 	background-color: #f6f5f3;
+}
+
+.stylesRightGrid{
+	padding: 26px;
 }
 
 @media only screen and (min-width: 1000px) and (max-width:1200px){
@@ -142,3 +122,4 @@
 	font-size: 0.875rem;
     color: red
 }
+

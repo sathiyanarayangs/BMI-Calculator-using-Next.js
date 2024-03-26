@@ -132,7 +132,7 @@ export default function Calculator() {
   return (
     <>
     <div style={{display: 'flex', justifyContent:'space-evenly'}}>
-      <div style={{ width: '80%'}}>
+      <div style={{ width: '100%'}}>
         <Header/>
         <div className={styles.stylesGrid}>
           <LeftGrid

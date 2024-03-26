@@ -1,0 +1,12 @@
+.ButtonContainer {
+	margin-top: 25px;
+
+}
+  
+.CalculateButton {
+	background-color: #657E79;
+	color: #ffffff; 
+	padding: 14px 24px;
+	border-radius: 4px;
+	width: 100%;
+}
