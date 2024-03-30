@@ -1,12 +1,11 @@
-.ButtonContainer {
-	margin-top: 25px;
-
-}
-  
-.CalculateButton {
+/* .CustomButton {
 	background-color: #657E79;
 	color: #ffffff; 
-	padding: 14px 24px;
 	border-radius: 4px;
+} */
+
+.defaultStyles{
+	margin-top: 20px;
+	padding: 14px 24px;
 	width: 100%;
 }
